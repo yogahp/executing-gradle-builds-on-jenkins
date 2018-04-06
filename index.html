@@ -89,14 +89,25 @@
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="what_you_ll_build"><a class="anchor" href="#what_you_ll_build"></a><a class="link" href="#what_you_ll_build">What you&#8217;ll build</a></h2>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Building Gradle projects doesn&#8217;t stop with the developer&#8217;s machine.
 <a href="https://en.wikipedia.org/wiki/Continuous_integration">Continuous Integration</a> (CI) has been a long-established practice for running a build for every single change committed to version control to tighten the feedback loop.
 In this guide, we&#8217;ll discuss how to configure Jenkins for a typical Gradle project.</p>
 </div>
+</div>
+<div id="toc" class="toc">
+<div id="toctitle">Contents</div>
+<ul class="sectlevel1">
+<li><a href="#what_you_ll_need">What you&#8217;ll need</a></li>
+<li><a href="#setup_a_typical_project">Setup a typical project</a></li>
+<li><a href="#setup_jenkins">Setup Jenkins</a></li>
+<li><a href="#create_a_jenkins_job">Create a Jenkins job</a></li>
+<li><a href="#further_reading">Further reading</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#help_improve_this_guide">Help improve this guide</a></li>
+</ul>
 </div>
 </div>
 <div class="sect1">
@@ -127,18 +138,18 @@ In this guide, we&#8217;ll discuss how to configure Jenkins for a typical Gradle
 </div>
 </div>
 <div class="sect1">
-<h2 id="building_a_typical_java_project"><a class="anchor" href="#building_a_typical_java_project"></a><a class="link" href="#building_a_typical_java_project">Building a typical Java project</a></h2>
+<h2 id="setup_a_typical_project"><a class="anchor" href="#setup_a_typical_project"></a><a class="link" href="#setup_a_typical_project">Setup a typical project</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As example, this post is going to discuss a Java-based project.
-More specifically, the project is a Gradle plugin written in Java and tested with the <a href="http://spockframework.org/">Spock framework</a>.
+<p>As example, this guide is going to focus on a Java-based project.
+More specifically, a Gradle plugin written in Java and tested with Spock.
 First, we&#8217;ll get the project set up on your local machine before covering the same steps on CI.</p>
 </div>
 <div class="paragraph">
 <p>Just follow these steps:</p>
 </div>
 <div class="sect2">
-<h3 id="clone_a_href_https_github_com_gradle_guides_gradle_site_plugin_gradle_site_plugin_a"><a class="anchor" href="#clone_a_href_https_github_com_gradle_guides_gradle_site_plugin_gradle_site_plugin_a"></a><a class="link" href="#clone_a_href_https_github_com_gradle_guides_gradle_site_plugin_gradle_site_plugin_a">Clone <a href="https://github.com/gradle-guides/gradle-site-plugin">Gradle Site Plugin</a></a></h3>
+<h3 id="clone_a_href_https_github_com_gradle_guides_gradle_site_plugin_gradle_site_plugin_a_repository"><a class="anchor" href="#clone_a_href_https_github_com_gradle_guides_gradle_site_plugin_gradle_site_plugin_a_repository"></a><a class="link" href="#clone_a_href_https_github_com_gradle_guides_gradle_site_plugin_gradle_site_plugin_a_repository">Clone <a href="https://github.com/gradle-guides/gradle-site-plugin">Gradle Site Plugin</a> repository</a></h3>
 <div class="listingblock">
 <div class="content">
 <pre>git clone https://github.com/gradle-guides/gradle-site-plugin.git
@@ -147,7 +158,7 @@ cd gradle-site-plugin</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="executing_the_build"><a class="anchor" href="#executing_the_build"></a><a class="link" href="#executing_the_build">Executing the build</a></h3>
+<h3 id="build_the_project"><a class="anchor" href="#build_the_project"></a><a class="link" href="#build_the_project">Build the project</a></h3>
 <div class="paragraph">
 <p>As a developer of a Java project, you&#8217;ll typical want to compile the source code, run the tests and assemble the JAR artifact. That&#8217;s no different for Gradle plugins. The following command achieves exactly that:</p>
 </div>
@@ -183,7 +194,7 @@ https://gradle.com/s/7mtynxxmesdio</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="using_jenkins"><a class="anchor" href="#using_jenkins"></a><a class="link" href="#using_jenkins">Using Jenkins</a></h2>
+<h2 id="setup_jenkins"><a class="anchor" href="#setup_jenkins"></a><a class="link" href="#setup_jenkins">Setup Jenkins</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Jenkins is one of the most prominent players in the field.
@@ -226,8 +237,11 @@ Under "Manage Jenkins &gt; Manage Plugins" ensure that you have the following tw
 <p>Next, we can set up the job for building the project.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="creating_and_configuring_the_job"><a class="anchor" href="#creating_and_configuring_the_job"></a><a class="link" href="#creating_and_configuring_the_job">Creating and configuring the job</a></h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="create_a_jenkins_job"><a class="anchor" href="#create_a_jenkins_job"></a><a class="link" href="#create_a_jenkins_job">Create a Jenkins job</a></h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Setting up a new Gradle job can be achieved with just a couple of clicks.
 From the left navigation bar select "New Item &gt; Freestyle project".
@@ -243,7 +257,7 @@ Enter the URL of the GitHub repository: <code><a href="https://github.com/gradle
 </div>
 </div>
 <div class="paragraph">
-<p>Futhermore, create a "Build step" in the section "Build" by selecting "Invoke Gradle build script".
+<p>Furthermore, create a "Build step" in the section "Build" by selecting "Invoke Gradle build script".
 As mentioned before, we&#8217;ll want to use the Wrapper to execute the build. In the "Tasks" input box enter the <code>build</code> and use the "Switches" <code>--scan -s</code> to generate a build scan and render a stack trace in case of a build failure.</p>
 </div>
 <div class="imageblock">
@@ -251,12 +265,11 @@ As mentioned before, we&#8217;ll want to use the Wrapper to execute the build. I
 <img src="images/jenkins-build-step.png" alt="jenkins build step">
 </div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="executing_the_job"><a class="anchor" href="#executing_the_job"></a><a class="link" href="#executing_the_job">Executing the job</a></h3>
 <div class="paragraph">
 <p>Save the configuration of job and execute an initial build by triggering the "Build Now" button.
-The build should finish successfully and render a "Gradle Build Scan" icon that brings you directly to the build scan.</p>
+The build should finish successfully and render a "Gradle Build Scan" icon that brings you directly to the <a href="https://scans.gradle.com">build scan</a> for the given build.</p>
 </div>
 <div class="imageblock" style="text-align: center">
 <div class="content">
@@ -264,8 +277,7 @@ The build should finish successfully and render a "Gradle Build Scan" icon that 
 </div>
 </div>
 <div class="paragraph">
-<p>There are various options to trigger Jenkins builds continuously: from polling the repository periodically, to building on a set schedule, or via callback URL.
-Please refer to the documentation on "build triggers" for more information.</p>
+<p>There are various options to trigger Jenkins builds continuously: from polling the repository periodically, to building on a set schedule, or via callback URL.</p>
 </div>
 </div>
 </div>
@@ -279,7 +291,7 @@ Please refer to the documentation on "build triggers" for more information.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://jenkins.io/doc/book/using/using-credentials/">Using credentials</a></p>
+<p><a href="https://jenkins.io/doc/book/using/using-credentials/">Using credentials with Jenkins</a></p>
 </li>
 <li>
 <p><a href="https://jenkins.io/solutions/pipeline/">Pipeline as code with Jenkins</a></p>
@@ -297,8 +309,7 @@ Please refer to the documentation on "build triggers" for more information.</p>
 <div class="paragraph">
 <p>Executing Gradle builds on CI can be set up and configured with just a handful of steps.
 The benefit of receiving fast feedback clearly speaks for itself.
-You are not using Jenkins?
-No problem, many CI products tightly integrate with Gradle as a first-class citizen.</p>
+If you are not using Jenkins, no problem, many CI products tightly integrate with Gradle as a first-class citizen.</p>
 </div>
 </div>
 </div>
